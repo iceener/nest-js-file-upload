@@ -53,8 +53,8 @@ export const multerOptions: MulterOptions = {
 
 function generateFileName(originalname: string) {
   const fileExtension = extname(originalname);
-  return `${originalname.toLowerCase().replace(/ /g, '-')}-${uuid().slice(
-    0,
-    10,
-  )}${fileExtension}`;
+  return `${originalname
+    .replace(fileExtension, '')
+    .toLowerCase()
+    .replace(/ /g, '-')}-${uuid().slice(0, 10)}${fileExtension}`;
 }
