@@ -10,8 +10,9 @@ import { multerOptions } from '../config/multerOptions.config';
 @Controller('uploads')
 export class UploadsController {
   @Post('file')
-  @UseInterceptors(FileInterceptor('avatar', multerOptions))
+  @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@UploadedFile() file) {
-    return { message: 'File is uploaded' };
+    // get file url
+    return { url: file.path };
   }
 }
