@@ -13,7 +13,7 @@ export class UploadsController {
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@UploadedFile() file) {
     return {
-      filename: file.path,
+      filename: file.filename,
       url: `https://cloud.overment.com/${file.filename}`,
     };
   }
