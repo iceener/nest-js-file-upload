@@ -5,6 +5,7 @@ import { diskStorage } from 'multer';
 import { Request } from 'express';
 import { existsSync, mkdirSync } from 'fs';
 import { v4 as uuid } from 'uuid';
+import { format } from 'date-fns';
 
 export const multerOptions: MulterOptions = {
   limits: {
@@ -15,7 +16,12 @@ export const multerOptions: MulterOptions = {
     file: Express.Multer.File,
     done: (error: Error, acceptFile: boolean) => void,
   ) {
-    if (file.mimetype.match(/\/(jpg|jpeg|png|gif)$/)) {
+    console.log(file.mimetype);
+    if (
+      file.mimetype.match(
+        /\/(jpg|jpeg|png|gif|pdf|doc|docx|mp3|wav|m4a|markdown|md|json|zip|plain)$/,
+      )
+    ) {
       done(null, true);
     } else {
       done(
@@ -29,16 +35,15 @@ export const multerOptions: MulterOptions = {
   },
   storage: diskStorage({
     destination(
-      Request: Request,
+      req: Request,
       file: Express.Multer.File,
-      done: (error: Error | null, filename: string) => void,
+      done: (error: Error | null, destination: string) => void,
     ) {
-      const uploadPath = process.env.UPLOAD_TEMP_DIR;
-
+      const date = format(new Date(), 'yyyy-MM-dd');
+      const uploadPath = `${process.env.UPLOAD_TEMP_DIR}/${date}`;
       if (!existsSync(uploadPath)) {
-        mkdirSync(uploadPath);
+        mkdirSync(uploadPath, { recursive: true });
       }
-
       done(null, uploadPath);
     },
     filename(

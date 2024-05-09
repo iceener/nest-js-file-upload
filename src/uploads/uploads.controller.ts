@@ -14,16 +14,15 @@ export class UploadsController {
   @Post('file')
   @UseInterceptors(FileInterceptor('image', multerOptions))
   async uploadFile(@Req() req, @UploadedFile() file) {
-    // read Authorization header
     const token = req.headers.authorization;
 
-    if (token && token.split(' ')[1] !== process.env.API_KEY) {
-      throw new UnauthorizedException();
+    if (!token) {
+      throw new UnauthorizedException('No token provided');
     }
 
     return {
       filename: file.filename,
-      url: `https://cloud.overment.com/${file.filename}`,
+      url: `https://cloud.overment.com/${file.path}`,
     };
   }
 }
