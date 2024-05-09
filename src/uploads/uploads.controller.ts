@@ -16,7 +16,7 @@ export class UploadsController {
   async uploadFile(@Req() req, @UploadedFile() file) {
     const token = req.headers.authorization;
 
-    if (!token) {
+    if (!token || token?.split(' ')?.[1] !== process.env.API_KEY) {
       throw new UnauthorizedException('No token provided');
     }
 
