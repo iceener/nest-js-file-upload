@@ -22,7 +22,9 @@ export class UploadsController {
 
     return {
       filename: file.filename,
-      url: `https://cloud.overment.com/${file.path}`,
+      url: `https://cloud.overment.com/${
+        file.path.split('/var/www/cloud/')[1]
+      }`,
     };
   }
 }
